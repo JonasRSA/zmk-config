@@ -1,20 +1,19 @@
-# This file generates the GitHub Actions matrix.
-# For simple board + shield combinations, add them to the top level board and
-# shield arrays, for more control, add individual board + shield combinations
-# to the `include` property. You can also use the `cmake-args` property to
-# pass flags to the build command, `snippet` to add a Zephyr snippet, and
-# `artifact-name` to assign a name to distinguish build outputs from each other:
-#
-# board: [ "nice_nano" ]
-# shield: [ "corne_left", "corne_right" ]
-# include:
-#   - board: bdn9_rev2
-#   - board: nice_nano
-#     shield: reviung41
-#   - board: nice_nano
-#     shield: corne_left
-#     snippet: studio-rpc-usb-uart
-#     cmake-args: -DCONFIG_ZMK_STUDIO=y
-#     artifact-name: corne_left_with_studio
-#
+# GitHub-Actions-Build-Matrix fuer HillSideView 46.
+# RECHTE Haelfte = Central (+ ZMK Studio, spaeter Touchpad).
+# LINKE Haelfte  = Peripheral (+ nice!view).
+# ZMK Studio laeuft auf der Central -> Studio-Snippet gehoert an die rechte Haelfte
+# (zum Studio-Nutzen USB in die RECHTE Haelfte stecken).
 ---
+include:
+  - board: nice_nano_v2
+    shield: jar_hillside_right
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: jar_hillside_right
+  - board: nice_nano_v2
+    shield: jar_hillside_left nice_view
+    artifact-name: jar_hillside_left
+  # Optional: Settings-Reset-Firmware (bei Kopplungsproblemen auf jede Haelfte flashen)
+  - board: nice_nano_v2
+    shield: settings_reset
+    artifact-name: settings_reset

@@ -1,0 +1,5 @@
+config SHIELD_JAR_HILLSIDE_LEFT
+    def_bool $(shields_list_contains,jar_hillside_left)
+
+config SHIELD_JAR_HILLSIDE_RIGHT
+    def_bool $(shields_list_contains,jar_hillside_right)

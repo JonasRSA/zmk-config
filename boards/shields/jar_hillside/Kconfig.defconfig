@@ -1,0 +1,28 @@
+# Split-Rollen fuer HillSideView 46.
+#
+# RECHTE Haelfte = CENTRAL. Grund: das TPS43-Touchpad sitzt rechts, und ein
+# Zeigegeraet ist auf der central deutlich einfacher zu integrieren als per
+# Input-Splitting von der Peripherie. Die Verdrahtung ist auf beiden Seiten
+# identisch, die Rolle ist also reine Firmware-Sache.
+#
+# Hinweis Display: das nice!view sitzt links (=Peripheral) und zeigt damit den
+# Peripheral-Status (Akku/Animation), NICHT Layer/WPM. Willst du die reichere
+# Anzeige lieber jetzt schon (bevor das Touchpad laeuft), tausche einfach
+# LEFT<->RIGHT in den beiden if-Bloecken unten.
+
+if SHIELD_JAR_HILLSIDE_RIGHT
+
+config ZMK_KEYBOARD_NAME
+    default "jar_hillside"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif # SHIELD_JAR_HILLSIDE_RIGHT
+
+if SHIELD_JAR_HILLSIDE_LEFT || SHIELD_JAR_HILLSIDE_RIGHT
+
+config ZMK_SPLIT
+    default y
+
+endif # SHIELD_JAR_HILLSIDE_LEFT || SHIELD_JAR_HILLSIDE_RIGHT

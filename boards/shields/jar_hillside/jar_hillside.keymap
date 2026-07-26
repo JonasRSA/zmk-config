@@ -1,0 +1,81 @@
+// HillSideView 46 - Keymap
+//
+// QWERTZ-Basis, ausgelegt fuer ein DEUTSCHES Betriebssystem-Layout.
+// ZMK sendet US-HID-Codes; unter deutschem OS-Layout ergeben sich daraus die
+// deutschen Zeichen. Deshalb sind Y/Z getauscht und Umlaute ueber US-Tasten:
+//   z -> &kp Y     y -> &kp Z
+//   ue -> &kp LBKT ("[")     oe -> &kp SEMI (";")     ae -> &kp SQT ("'")
+//   ss -> &kp MINUS ("-")    "-" -> &kp FSLH ("/")
+// Ist dein OS auf US eingestellt, tippe stattdessen die kommentierten US-Zeichen.
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+#define BASE   0
+#define LOWER  1
+#define RAISE  2
+#define ADJUST 3
+
+/ {
+    // Tri-Layer: LOWER + RAISE gleichzeitig -> ADJUST
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        tri {
+            if-layers = <LOWER RAISE>;
+            then-layer = <ADJUST>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base_layer {
+            display-name = "QWERTZ";
+            // ,-----------------------------------.      ,-----------------------------------.
+            // | TAB |  Q |  W |  E |  R |  T |     |      |  Z |  U |  I |  O |  P | UE |
+            // | ESC |  A |  S |  D |  F |  G |     |      |  H |  J |  K |  L | OE | AE |
+            // | SHFT|  Y |  X |  C |  V |  B |     |      |  N |  M |  , |  . |  - | SHFT|
+            //        | CTL| GUI| ALT|LOWR| SPC|      | RET|RAIS| BSP|ALTGR|
+            bindings = <
+&kp TAB    &kp Q  &kp W  &kp E  &kp R  &kp T        &kp Y  &kp U  &kp I     &kp O   &kp P     &kp LBKT
+&kp ESC    &kp A  &kp S  &kp D  &kp F  &kp G        &kp H  &kp J  &kp K     &kp L   &kp SEMI  &kp SQT
+&kp LSHFT  &kp Z  &kp X  &kp C  &kp V  &kp B        &kp N  &kp M  &kp COMMA &kp DOT &kp FSLH  &kp RSHFT
+        &kp LCTRL &kp LGUI &kp LALT &mo LOWER &kp SPACE    &kp RET &mo RAISE &kp BSPC &kp RALT
+            >;
+        };
+
+        lower_layer {
+            display-name = "Zahlen/Nav";
+            // Zahlenreihe oben, Navigationsblock rechts.
+            bindings = <
+&trans   &kp N1  &kp N2  &kp N3  &kp N4  &kp N5        &kp N6    &kp N7    &kp N8   &kp N9    &kp N0   &kp BSPC
+&trans   &trans  &trans  &trans  &trans  &trans        &kp LEFT  &kp DOWN  &kp UP   &kp RIGHT &kp HOME &kp END
+&trans   &trans  &trans  &trans  &trans  &trans        &kp PG_UP &kp PG_DN &kp INS  &trans    &trans   &trans
+              &trans &trans &trans &trans &trans        &kp DEL   &trans    &trans   &trans
+            >;
+        };
+
+        raise_layer {
+            display-name = "Fn/Medien";
+            // Funktionstasten + Medien-/Lautstaerkesteuerung.
+            bindings = <
+&trans   &kp F1   &kp F2   &kp F3  &kp F4  &kp F5        &kp F6      &kp F7        &kp F8        &kp F9     &kp F10  &trans
+&trans   &kp F11  &kp F12  &trans  &trans  &trans        &kp C_PREV  &kp C_VOL_DN  &kp C_VOL_UP  &kp C_NEXT &trans   &trans
+&trans   &trans   &trans   &trans  &trans  &trans        &kp C_MUTE  &kp C_PP      &trans        &trans     &trans   &trans
+              &trans &trans &trans &trans &trans          &trans      &trans        &trans        &trans
+            >;
+        };
+
+        adjust_layer {
+            display-name = "System/BT";
+            // Bluetooth-Profile, Bootloader, Reset. Erreichbar via LOWER+RAISE.
+            bindings = <
+&bt BT_CLR   &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4    &trans &trans &trans &trans &trans &trans
+&bootloader  &trans       &trans       &trans       &trans       &trans          &trans &trans &trans &trans &trans &bootloader
+&sys_reset   &trans       &trans       &trans       &trans       &trans          &trans &trans &trans &trans &trans &sys_reset
+                    &trans &trans &trans &trans &trans                            &trans &trans &trans &trans
+            >;
+        };
+    };
+};
